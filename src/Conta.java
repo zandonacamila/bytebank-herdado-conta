@@ -1,14 +1,11 @@
 
-public abstract class Conta {
+public class Conta {
 	Cliente cliente;
 	private int numero;
 	private int agencia;
 	protected double saldo;
 	private static int total;
-	
-	public static int getTotal() {
-		return total;
-	}
+
 	
 	public Conta(int agencia, int numero) {
 		Conta.total++;
@@ -16,6 +13,10 @@ public abstract class Conta {
 		this.numero = numero;
 	}
 	
+	public static int getTotal() {
+		return total;
+	}
+
 	public double getSaldo() {
 		return this.saldo;
 	}
@@ -49,8 +50,14 @@ public abstract class Conta {
 		this.agencia = agencia;
 	}
 
-	public abstract boolean deposita(double valor);
-	
+	public boolean deposita(double valor) {
+		if(valor >= 0) {
+			this.saldo += valor;
+			return true;
+		}
+		return false;
+	}
+
 	public boolean saca(double valor) {
 		
 		if(this.saldo < valor) {
@@ -64,8 +71,9 @@ public abstract class Conta {
 	}
 
 	public boolean transfere(double valor, Conta conta) {
-		if(this.saca(valor)) {
-			conta.deposita(valor);
+		if(this.saldo >= valor) {
+			this.saldo -= valor;
+			conta.saldo += valor;
 			return true;
 		}
 		return false;
